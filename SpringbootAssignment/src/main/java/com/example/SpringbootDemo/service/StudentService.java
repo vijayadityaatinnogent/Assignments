@@ -1,7 +1,9 @@
 package com.example.SpringbootDemo.service;
 
+import com.example.SpringbootDemo.Entity.Course;
 import com.example.SpringbootDemo.exception.StudentNotFoundException;
-import com.example.SpringbootDemo.model.Student;
+import com.example.SpringbootDemo.Entity.Student;
+import com.example.SpringbootDemo.repository.CourseRepository;
 import com.example.SpringbootDemo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ public class StudentService{
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Student addStudent(Student student){
         return studentRepository.save(student);
@@ -31,12 +36,34 @@ public class StudentService{
         studentRepository.delete(student);
     }
 
-    public Student updateStudent(int id,Student updateStudent) throws StudentNotFoundException {
-        Student existing = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("studnet not found in database"));
-        existing.setName(updateStudent.getName());
-        existing.setEmail(updateStudent.getEmail());
-        existing.setAddress(updateStudent.getAddress());
+    public void deleteAllStudents(){
+        studentRepository.deleteAll();
+    }
+
+    public Student updateStudent(int id,Student updatedStudent) throws StudentNotFoundException {
+        Student existing = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("student not found in database"));
+        existing.setName(updatedStudent.getName());
+        existing.setEmail(updatedStudent.getEmail());
+        existing.setAddress(updatedStudent.getAddress());
+        if (updatedStudent.getCourse() != null && updatedStudent.getCourse().getCourseId() != null) {
+            Course course = courseRepository.findById(updatedStudent.getCourse().getCourseId())
+                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + updatedStudent.getCourse().getCourseId()));
+            existing.setCourse(course);
+        }
+
         return studentRepository.save(existing);
+    }
+
+    public List<Student> getStudentsByCourseName(String courseName) {
+        return studentRepository.findByCourseName(courseName);
+    }
+
+    public List<Student> getStudentsWithoutCourse() {
+        return studentRepository.findStudentsWithoutCourse();
+    }
+
+    public List<Student> searchByCityAndInstructor(String city, String instructor) {
+        return studentRepository.findByCityAndInstructor(city, instructor);
     }
 
 
