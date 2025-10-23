@@ -1,0 +1,10 @@
+package com.librarymanagementsystem.librarymanagementSystem.Repository;
+
+import com.librarymanagementsystem.librarymanagementSystem.Entity.BookEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface BookRepository extends JpaRepository<BookEntity,Long> {
+    List<BookEntity> findByTitleContainingIgnoreCase(String title);
+}
