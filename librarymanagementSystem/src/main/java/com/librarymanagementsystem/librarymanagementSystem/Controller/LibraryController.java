@@ -19,7 +19,7 @@ public class LibraryController {
         @Autowired
         private LibraryServiceImpl libraryService;
 
-        // ✅ Add a new author
+        // Add a new author
         @PostMapping("/authors")
         public AuthorEntity addAuthor(@RequestBody AuthorEntity author) {
             return libraryService.addAuthor(author);
@@ -32,26 +32,26 @@ public class LibraryController {
         }
 
 
-    // ✅ Add a new book (linked with existing author)
+        // Add a new book (linked with existing author)
         @PostMapping("/books/{authorId}")
         public BookEntity addBook(@RequestBody BookEntity book, @PathVariable Long authorId) throws ResourceNotFoundException {
             return libraryService.addBook(book, authorId);
         }
 
-        // ✅ Add a new member
+        // Add a new member
         @PostMapping("/members")
         public MemberEntity addMember(@RequestBody MemberEntity member) {
             return libraryService.addMember(member);
         }
 
-        // ✅ Borrow a book
+        // Borrow a book
         @PostMapping("/borrow/{memberId}/{bookId}")
         public String borrowBook(@PathVariable Long memberId, @PathVariable Long bookId) throws ResourceNotFoundException {
             libraryService.borrowBook(memberId, bookId);
             return "Book borrowed successfully!";
         }
 
-        // ✅ Get all borrowed books for a member
+        // Get all borrowed books for a member
         @GetMapping("/members/{memberId}/borrowed-books")
         public List<BookEntity> getBorrowedBooks(@PathVariable Long memberId) throws ResourceNotFoundException {
             return libraryService.getBorrowedBooksByMember(memberId);
@@ -62,11 +62,12 @@ public class LibraryController {
             return ResponseEntity.ok(libraryService.getAllAuthors());
         }
 
-        // -----------------------------
+        
         // Optional: get full list of books
-        // -----------------------------
+        
         @GetMapping("/books")
         public ResponseEntity<List<BookEntity>> getAllBooks() {
             return ResponseEntity.ok(libraryService.getAllBooks());
         }
 }
+
