@@ -25,7 +25,7 @@ public class DtoController {
         @Autowired
         private ModelMapper modelMapper;
 
-        // ✅ Add a new author
+        // Add a new author
         @PostMapping("/authors")
         public AuthorDTO addAuthor(@RequestBody AuthorDTO authorDTO) {
             AuthorEntity authorEntity = modelMapper.map(authorDTO, AuthorEntity.class);
@@ -33,7 +33,7 @@ public class DtoController {
             return modelMapper.map(savedAuthor, AuthorDTO.class);
         }
 
-        // ✅ Add a new book (linked with author)
+        // Add a new book (linked with author)
         @PostMapping("/books/{authorId}")
         public BookDTO addBook(@RequestBody BookDTO bookDTO, @PathVariable Long authorId) throws ResourceNotFoundException {
             BookEntity bookEntity = modelMapper.map(bookDTO, BookEntity.class);
@@ -41,7 +41,7 @@ public class DtoController {
             return modelMapper.map(savedBook, BookDTO.class);
         }
 
-        // ✅ Add new member
+        // Add new member
         @PostMapping("/members")
         public MemberDTO addMember(@RequestBody MemberDTO memberDTO) {
             MemberEntity memberEntity = modelMapper.map(memberDTO, MemberEntity.class);
@@ -49,14 +49,14 @@ public class DtoController {
             return modelMapper.map(savedMember, MemberDTO.class);
         }
 
-        // ✅ Borrow a book
+        // Borrow a book
         @PostMapping("/borrow/{memberId}/{bookId}")
         public String borrowBook(@PathVariable Long memberId, @PathVariable Long bookId) throws ResourceNotFoundException {
             libraryService.borrowBook(memberId, bookId);
             return "Book borrowed successfully!";
         }
 
-        // ✅ Get all borrowed books for a member
+        // Get all borrowed books for a member
         @GetMapping("/members/{memberId}/borrowed-books")
         public List<BookDTO> getBorrowedBooks(@PathVariable Long memberId) throws ResourceNotFoundException {
             List<BookEntity> books = libraryService.getBorrowedBooksByMember(memberId);
@@ -65,3 +65,4 @@ public class DtoController {
                     .collect(Collectors.toList());
         }
     }
+
